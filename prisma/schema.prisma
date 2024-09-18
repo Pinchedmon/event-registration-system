@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id          String        @id @default(cuid())
+    email       String        @unique
+    password    String
+    role        Role          @default(USER)
+    team        Team?         @relation(fields: [teamId], references: [id])
+    events      Event[]
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    deletedAt   DateTime?
+    teamId      String?
+    Participant Participant[]
+}
+
+model Event {
+    id                    String        @id @default(cuid())
+    name                  String
+    description           String?
+    startDate             DateTime
+    endDate               DateTime
+    address               String
+    registration          Boolean
+    registrationStartDate DateTime
+    registrationEndDate   DateTime
+    createdAt             DateTime      @default(now())
+    updatedAt             DateTime      @updatedAt
+    deletedAt             DateTime?
+    organizer             User?         @relation(fields: [userId], references: [id])
+    participants          Participant[]
+    userId                String?
+}
+
+model Participant {
+    id        String            @id @default(cuid())
+    event     Event             @relation(fields: [eventId], references: [id])
+    user      User              @relation(fields: [userId], references: [id])
+    status    ParticipantStatus @default(PENDING)
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+    deletedAt DateTime?
+    eventId   String
+    userId    String
+}
+
+model Team {
+    id        String         @id @default(cuid())
+    name      String
+    theme     String?
+    endDate   DateTime?
+    status    TeamStatusType @default(ACTIVE)
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    deletedAt DateTime?
+    users     User[]
+}
+
+enum Role {
+    ADMIN
+    ORGANIZER
+    REGISTRATOR
+    USER
+}
+
+enum ParticipantStatus {
+    APPROVED
+    REJECTED
+    PENDING
+}
+
+enum TeamStatusType {
+    ACTIVE
+    INACTIVE
+}
