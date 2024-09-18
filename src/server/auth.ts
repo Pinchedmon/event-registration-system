@@ -5,11 +5,13 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
+import { verify } from "argon2";
 
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
+import { Prisma } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -50,18 +52,48 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
+      name: "credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        login: { label: "Логин", type: "text" },
+        password: { label: "Пароль", type: "password" },
+        role: { label: "Роль", type: "text" },
       },
-      async authorize(credentials, req) {
-        return null;
+      async authorize(credentials) {
+        if (!credentials) {
+          return null;
+        }
+        const { login, role, password } = credentials;
+
+        // Для внутренних тестов
+        if (login === "1" && role === "Администратор" && password === "1") {
+          return {
+            id: "1",
+            email: "admin@example.com",
+            role: "Администратор",
+          };
+        }
+        const user = await db.user.findFirst({
+          where: {
+            email: login,
+            password: password,
+            role: role as Prisma.EnumRoleFilter<"User">,
+          },
+        });
+
+        if (!user) {
+          return null;
+        }
+        const isValidPassword = await verify(user.password, password);
+
+        if (!isValidPassword) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],

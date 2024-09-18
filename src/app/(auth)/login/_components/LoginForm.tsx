@@ -1,9 +1,10 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import React from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../../lib/utils";
+import { signIn } from "next-auth/react";
 
 interface Props {
   className?: string;
@@ -28,8 +29,14 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      login: data.login,
+      password: data.password,
+      role: data.role,
+    });
+    console.log(result);
   };
 
   return (
@@ -70,8 +77,7 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
       <div className="relative w-full">
         <select
           className={cn(
-            "peer w-full rounded-md border-l-[16px] border-r-8 border-transparent px-4 py-[11px] pl-10 outline outline-1 outline-gray-300 focus:outline-[3px] focus:outline-blue-500 peer-focus:bg-white peer-focus:text-blue-500",
-            className,
+            "m-0 w-full rounded-md border-l-[16px] border-r-8 border-transparent px-4 py-[11px] outline outline-1 outline-gray-300 focus:outline-[3px] focus:outline-blue-500 peer-focus:bg-white peer-focus:text-blue-500",
           )}
           id="role"
           {...register("role", { required: true })}
@@ -93,16 +99,6 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
       <Button className="bg-blue-500" type="submit">
         Войти
       </Button>
-      <div className="text-center">
-        <p className="mb-0 text-center">Ещё не зарегистрированы?</p>
-        <Link className="underline" href="#">
-          Регистрация
-        </Link>
-        <p className="mt-4">Забыли пароль?</p>
-        <Link className="underline" href="#">
-          Восстановить
-        </Link>
-      </div>
     </form>
   );
 };
