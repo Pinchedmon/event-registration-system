@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { cn } from "../../../../lib/utils";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   className?: string;
@@ -23,27 +24,40 @@ type Inputs = {
 };
 
 export const LoginForm: React.FC<Props> = ({ className }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
 
+  const [result, setResult] = useState<{ ok: boolean } | null>(null);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const result = await signIn("credentials", {
+    const req = await signIn("credentials", {
       redirect: false,
       login: data.login,
       password: data.password,
-      role: data.role,
+      role: Object.keys(Roles)[Object.values(Roles).indexOf(data.role)]! as
+        | "USER"
+        | "ADMIN"
+        | "ORGANIZER"
+        | "REGISTRATOR",
     });
-    console.log(result);
-  };
 
+    req?.ok && router.push("/home");
+    setResult(req!);
+  };
+  useEffect(() => {
+    if (result?.ok === false) {
+      setTimeout(() => setResult(null), 1000);
+    }
+  }, [result]);
   return (
     <form
       className={cn(className, "flex flex-col gap-4")}
       onSubmit={handleSubmit(onSubmit)}
     >
+      {errors.login && <span className="text-red-500">Введите логин</span>}
       <div className="relative w-full">
         <input
           type="text"
@@ -57,8 +71,8 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
         >
           Логин
         </label>
-        {errors.login && <span>Введите пароль</span>}
       </div>
+      {errors.password && <span className="text-red-500">Введите пароль</span>}
       <div className="relative w-full">
         <input
           type="text"
@@ -72,12 +86,11 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
         >
           Пароль
         </label>
-        {errors.password && <span>Введите пароль</span>}
       </div>
       <div className="relative w-full">
         <select
           className={cn(
-            "m-0 w-full rounded-md border-l-[16px] border-r-8 border-transparent px-4 py-[11px] outline outline-1 outline-gray-300 focus:outline-[3px] focus:outline-blue-500 peer-focus:bg-white peer-focus:text-blue-500",
+            "m-0 w-full rounded-md border-r-8 border-transparent px-4 py-[11px] outline outline-1 outline-gray-300 focus:outline-[3px] focus:outline-blue-500 peer-focus:bg-white peer-focus:text-blue-500",
           )}
           id="role"
           {...register("role", { required: true })}
@@ -96,8 +109,17 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
         </label>
         {errors.role && <span>Выберите роль</span>}
       </div>
-      <Button className="bg-blue-500" type="submit">
-        Войти
+      <Button
+        className={
+          result?.ok
+            ? "bg-green-500"
+            : result === null
+              ? "bg-blue-500"
+              : "bg-red-500"
+        }
+        type="submit"
+      >
+        {result?.ok ? "Входим..." : result === null ? "Войти" : "Ошибка входа"}
       </Button>
     </form>
   );

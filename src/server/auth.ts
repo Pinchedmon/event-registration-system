@@ -1,17 +1,13 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import { verify } from "argon2";
 
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { Prisma } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,18 +16,17 @@ import { Prisma } from "@prisma/client";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+      email: string;
+      role: string;
+    };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role: string;
+  }
 }
 
 /**
@@ -40,16 +35,8 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-  },
-  adapter: PrismaAdapter(db) as Adapter,
+  secret: process.env.SECRET,
+
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -64,31 +51,19 @@ export const authOptions: NextAuthOptions = {
         }
         const { login, role, password } = credentials;
 
-        // Для внутренних тестов
-        if (login === "1" && role === "Администратор" && password === "1") {
-          return {
-            id: "1",
-            email: "admin@example.com",
-            role: "Администратор",
-          };
-        }
         const user = await db.user.findFirst({
           where: {
             email: login,
             password: password,
-            role: role as Prisma.EnumRoleFilter<"User">,
+            role: role as any,
           },
         });
-
+        console.log(1);
         if (!user) {
           return null;
         }
-        const isValidPassword = await verify(user.password, password);
 
-        if (!isValidPassword) {
-          return null;
-        }
-
+        console.log(4);
         return {
           id: user.id,
           email: user.email,
@@ -97,6 +72,43 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          email: token.email,
+          role: token.role,
+        },
+      };
+    },
+  },
+
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    maxAge: 15 * 24 * 30 * 60, // 15 days
+  },
+  pages: {
+    error: "/error",
+    newUser: "/signup",
+    signOut: "/",
+    signIn: "/",
+  },
 };
 
 /**
