@@ -2,7 +2,6 @@ import { getServerAuthSession } from "@/server/auth";
 import { HydrateClient } from "@/trpc/server";
 import { SignUpForm } from "./_components/SignUp";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 export default async function AuthPage() {
   const session = await getServerAuthSession();

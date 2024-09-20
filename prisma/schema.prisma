@@ -42,6 +42,7 @@ model Event {
     startDate             DateTime
     endDate               DateTime
     address               String
+    image                 String?
     registration          Boolean
     registrationStartDate DateTime
     registrationEndDate   DateTime
