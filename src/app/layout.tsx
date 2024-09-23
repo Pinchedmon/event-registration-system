@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/toaster";
+import Provider from "@/lib/provider";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Provider>{children}</Provider>
+        </TRPCReactProvider>
         <Toaster />
       </body>
     </html>

@@ -3,9 +3,9 @@ import { z } from "zod";
 export const eventSchema = z.object({
   id: z.string().optional(),
   name: z.string(),
-  description: z.string().optional(),
+  description: z.string().nullable(), // <--- Change this line
   startDate: z.date(),
-  image: z.string().optional(),
+  image: z.string().nullable(),
   endDate: z.date(),
   address: z.string().optional(),
   registration: z.boolean(),
@@ -13,9 +13,9 @@ export const eventSchema = z.object({
   registrationEndDate: z.date(),
   createdAt: z.date().default(new Date()),
   updatedAt: z.date().default(new Date()).optional(),
-  deletedAt: z.date().optional(),
+  deletedAt: z.date().nullable(),
   //   organizer: z.string().optional(),
-  userId: z.string().optional(),
+  userId: z.string().nullable(),
 });
 
 export const eventCardSchema = eventSchema.omit({

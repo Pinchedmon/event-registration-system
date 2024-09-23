@@ -15,28 +15,28 @@ datasource db {
 }
 
 model User {
-    id               String    @id @default(cuid())
+    id               String        @id @default(cuid())
     lastName         String?
     firstName        String?
     patronymic       String?
     organization     String?
     phone            String?
     position         String?
-    status           String?
-    email            String    @unique
+    email            String        @unique
     password         String
-    role             Role      @default(USER)
-    team             Team?     @relation(fields: [teamId], references: [id])
+    role             Role          @default(USER)
+    team             Team?         @relation(fields: [teamId], references: [id])
     events           Event[]
-    createdAt        DateTime  @default(now())
-    updatedAt        DateTime  @updatedAt
+    createdAt        DateTime      @default(now())
+    updatedAt        DateTime      @updatedAt
     deletedAt        DateTime?
     lastAuthorizedAt DateTime?
     teamId           String?
+    Participant      Participant[]
 }
 
 model Event {
-    id                    String    @id @default(cuid())
+    id                    String        @id @default(cuid())
     name                  String
     description           String?
     startDate             DateTime
@@ -46,11 +46,24 @@ model Event {
     registration          Boolean
     registrationStartDate DateTime
     registrationEndDate   DateTime
-    createdAt             DateTime  @default(now())
-    updatedAt             DateTime  @updatedAt
+    createdAt             DateTime      @default(now())
+    updatedAt             DateTime      @updatedAt
     deletedAt             DateTime?
-    organizer             User?     @relation(fields: [userId], references: [id])
+    organizer             User?         @relation(fields: [userId], references: [id])
     userId                String?
+    participants          Participant[]
+}
+
+model Participant {
+    id        String            @id @default(cuid())
+    event     Event             @relation(fields: [eventId], references: [id])
+    user      User              @relation(fields: [userId], references: [id])
+    status    ParticipantStatus @default(PENDING)
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+    deletedAt DateTime?
+    eventId   String
+    userId    String
 }
 
 model Team {

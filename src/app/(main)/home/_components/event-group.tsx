@@ -44,6 +44,7 @@ export const EventGroup: React.FC<Props> = ({ title, items, className }) => {
               startDate={item.startDate}
               endDate={item.endDate}
               address={item.address}
+              image={null}
             />
           ))}
         </div>

@@ -1,38 +1,21 @@
 "use client";
 
 import clsx from "clsx";
-import { Loader } from "lucide-react";
-// import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { memo } from "react";
 import Link from "next/link";
-import { CircleUser, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import Image from "next/image";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import TeamSwitcher from "./team-switcher";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ProfileBar } from "@/components/shared/profile/profile-bar";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const session = useSession();
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <div className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         <TeamSwitcher />
         <div className="flex w-full gap-8">
@@ -60,7 +43,7 @@ const Navbar = () => {
             Команда
           </Link>
 
-          <Link
+          {/* <Link
             href="/my/done"
             className={clsx(
               pathname == "/my/done"
@@ -70,11 +53,11 @@ const Navbar = () => {
             )}
           >
             Участники
-          </Link>
+          </Link> */}
           <Link
-            href="/my/done"
+            href="/dash/users"
             className={clsx(
-              pathname == "/my/done"
+              pathname == "/dash/users"
                 ? "text-blue-500"
                 : "text-muted-foreground",
               "transition-colors hover:text-foreground",
@@ -117,7 +100,7 @@ const Navbar = () => {
               Команда
             </Link>
 
-            <Link
+            {/* <Link
               href="/my/done"
               className={clsx(
                 pathname == "/my/done"
@@ -127,11 +110,11 @@ const Navbar = () => {
               )}
             >
               Участники
-            </Link>
+            </Link> */}
             <Link
-              href="/my/done"
+              href="/dash/users"
               className={clsx(
-                pathname == "/my/done"
+                pathname == "/dash/users"
                   ? "text-blue-500"
                   : "text-muted-foreground",
                 "transition-colors hover:text-foreground",
@@ -142,51 +125,13 @@ const Navbar = () => {
           </nav>
         </SheetContent>
       </Sheet>
-
-      <div className="ml-auto flex items-center space-x-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-                <AvatarFallback>SC</AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">shadcn</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  m@example.com
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                Profile
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                Billing
-                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                Settings
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>New Team</DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              Log out
-              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </header>
+      {session.data && (
+        <ProfileBar
+          email={session.data?.user.email}
+          id={session.data?.user.id}
+        />
+      )}
+    </div>
   );
 };
 export default memo(Navbar);

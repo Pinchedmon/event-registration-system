@@ -62,6 +62,16 @@ export const SignUpForm: React.FC<Props> = ({ className }) => {
         | "ADMIN"
         | "ORGANIZER"
         | "REGISTRATOR",
+      firstName: null,
+      lastName: null,
+      patronymic: null,
+      organization: null,
+      phone: null,
+      position: null,
+      status: null,
+      teamId: null,
+      deletedAt: null,
+      lastAuthorizedAt: null,
     });
   };
 

@@ -1,20 +1,15 @@
 import { getServerAuthSession } from "@/server/auth";
 import { HydrateClient } from "@/trpc/server";
-import Navbar from "./_components/navbar";
+import { EventTable } from "./event-table";
 
-export default async function DashPage() {
+export default async function EventsPage() {
   const session = await getServerAuthSession();
 
   return (
     <HydrateClient>
-      <div>main</div>
+      <main className="w-full text-2xl">
+        <EventTable />
+      </main>
     </HydrateClient>
   );
-}
-{
-  /* <div className="flex-col md:flex">
-<div className="border-b">
-  <Navbar />
-</div>
-</div> */
 }
