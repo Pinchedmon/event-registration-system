@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar additionalFilters={additionalFilters} table={table} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-blue-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers

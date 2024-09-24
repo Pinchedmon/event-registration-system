@@ -68,8 +68,6 @@ export const SignUpForm: React.FC<Props> = ({ className }) => {
       organization: null,
       phone: null,
       position: null,
-      status: null,
-      teamId: null,
       deletedAt: null,
       lastAuthorizedAt: null,
     });

@@ -154,6 +154,7 @@ export const usersColumns: ColumnDef<User>[] = [
   //     },
   //     accessorKey: "updatedAt",
   //   },
+
   {
     id: "actions",
     cell: ({ row }: any) => {

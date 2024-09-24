@@ -13,6 +13,11 @@ export const usersRouter = createTRPCRouter({
   getAllUsers: protectedProcedure.query(async () => {
     return db.user.findMany();
   }),
+  getAllUsersForTeams: protectedProcedure.query(async () => {
+    return db.user.findMany({
+      where: { role: { in: ["ORGANIZER", "REGISTRATOR"] } },
+    });
+  }),
   // Get a user by ID
   getUser: publicProcedure.input(z.string()).query(async ({ input }) => {
     return db.user.findUnique({ where: { id: input } });

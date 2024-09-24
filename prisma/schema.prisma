@@ -25,13 +25,12 @@ model User {
     email            String        @unique
     password         String
     role             Role          @default(USER)
-    team             Team?         @relation(fields: [teamId], references: [id])
+    team             Team[]
     events           Event[]
     createdAt        DateTime      @default(now())
     updatedAt        DateTime      @updatedAt
     deletedAt        DateTime?
     lastAuthorizedAt DateTime?
-    teamId           String?
     Participant      Participant[]
 }
 

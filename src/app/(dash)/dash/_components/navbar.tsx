@@ -17,7 +17,12 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <TeamSwitcher />
+        {session.data && (
+          <TeamSwitcher
+            id={session.data?.user.id}
+            email={session.data?.user.email}
+          />
+        )}
         <div className="flex w-full gap-8">
           <Link
             href="/dash/events"
@@ -32,15 +37,15 @@ const Navbar = () => {
           </Link>
 
           <Link
-            href="/dash/team"
+            href="/dash/teams"
             className={clsx(
-              pathname == "/my/workers"
+              pathname == "/dash/teams"
                 ? "text-blue-500"
                 : "text-muted-foreground",
               "transition-colors hover:text-foreground",
             )}
           >
-            Команда
+            Команды
           </Link>
 
           {/* <Link
@@ -91,13 +96,13 @@ const Navbar = () => {
             <Link
               href="/dash/team"
               className={clsx(
-                pathname == "/my/workers"
+                pathname == "/dash/team"
                   ? "text-blue-500"
                   : "text-muted-foreground",
                 "transition-colors hover:text-foreground",
               )}
             >
-              Команда
+              Команды
             </Link>
 
             {/* <Link
