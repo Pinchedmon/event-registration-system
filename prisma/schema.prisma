@@ -26,7 +26,6 @@ model User {
     password         String
     role             Role          @default(USER)
     team             Team[]
-    events           Event[]
     createdAt        DateTime      @default(now())
     updatedAt        DateTime      @updatedAt
     deletedAt        DateTime?
@@ -43,12 +42,11 @@ model Event {
     address               String
     image                 String?
     registration          Boolean
-    registrationStartDate DateTime
-    registrationEndDate   DateTime
+    registrationStartDate DateTime?
+    registrationEndDate   DateTime?
     createdAt             DateTime      @default(now())
     updatedAt             DateTime      @updatedAt
     deletedAt             DateTime?
-    organizer             User?         @relation(fields: [userId], references: [id])
     userId                String?
     participants          Participant[]
 }

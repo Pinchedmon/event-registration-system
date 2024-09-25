@@ -14,10 +14,10 @@ import React, { useState } from "react";
 
 import { toast } from "@/hooks/use-toast";
 
-export function TeamRemove(props: { id: string }) {
+export function EventRemove(props: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const trpcClient = api.useUtils();
-  const mutation = api.team.deleteTeam.useMutation({
+  const mutation = api.event.deleteEvent.useMutation({
     onMutate: () => {
       toast({
         title: "🔄 Создание...",
@@ -36,10 +36,10 @@ export function TeamRemove(props: { id: string }) {
         description: "Вы добавили картинки",
       });
       setIsOpen(false);
-      trpcClient.team.getAllTeams.refetch();
+      trpcClient.event.getAllEvents.refetch();
     },
   });
-  const removeTeam = () => {
+  const removeEvent = () => {
     mutation.mutate(props.id);
   };
 
@@ -54,12 +54,12 @@ export function TeamRemove(props: { id: string }) {
         <DialogHeader>
           <DialogTitle>Редактирование</DialogTitle>
           <DialogDescription>
-            Вы точно уверены, что хотите удалить эту группу?
+            Вы точно уверены, что хотите удалить это мероприятие?
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex gap-2">
-          <Button onClick={removeTeam} className="bg-blue-500">
+          <Button onClick={removeEvent} className="bg-blue-500">
             Да
           </Button>
           <Button onClick={() => setIsOpen(false)}>Нет</Button>

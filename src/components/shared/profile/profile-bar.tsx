@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { ProfileEdit } from "./profile-edit";
 import { CircleUser } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { MyEvents } from "./my-events";
 
 interface Props {
   className?: string;
@@ -38,6 +39,8 @@ export const ProfileBar: React.FC<Props> = ({ className, email, id }) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <ProfileEdit id={id} />
+          <DropdownMenuSeparator />
+          <MyEvents id={id} />
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOut()}>Выйти</DropdownMenuItem>
         </DropdownMenuContent>

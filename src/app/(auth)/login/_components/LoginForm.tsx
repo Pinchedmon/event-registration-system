@@ -20,7 +20,7 @@ enum Roles {
 type Inputs = {
   login: string;
   password: string;
-  role: Roles;
+  // role: Roles;
 };
 
 export const LoginForm: React.FC<Props> = ({ className }) => {
@@ -37,11 +37,11 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
       redirect: false,
       login: data.login,
       password: data.password,
-      role: Object.keys(Roles)[Object.values(Roles).indexOf(data.role)]! as
-        | "USER"
-        | "ADMIN"
-        | "ORGANIZER"
-        | "REGISTRATOR",
+      // role: Object.keys(Roles)[Object.values(Roles).indexOf(data.role)]! as
+      //   | "USER"
+      //   | "ADMIN"
+      //   | "ORGANIZER"
+      //   | "REGISTRATOR",
     });
 
     req?.ok && router.push("/home");
@@ -87,7 +87,7 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
           Пароль
         </label>
       </div>
-      <div className="relative w-full">
+      {/* <div className="relative w-full">
         <select
           className={cn(
             "m-0 w-full rounded-md border-r-8 border-transparent px-4 py-[11px] outline outline-1 outline-gray-300 focus:outline-[3px] focus:outline-blue-500 peer-focus:bg-white peer-focus:text-blue-500",
@@ -108,7 +108,7 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
           Роль
         </label>
         {errors.role && <span>Выберите роль</span>}
-      </div>
+      </div> */}
       <Button
         className={
           result?.ok

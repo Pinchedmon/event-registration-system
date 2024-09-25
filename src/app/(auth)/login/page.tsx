@@ -22,10 +22,10 @@ export default async function AuthPage() {
             <Link className="underline" href="/signup">
               Регистрация
             </Link>
-            <p className="mt-4">Забыли пароль?</p>
+            {/* <p className="mt-4">Забыли пароль?</p>
             <Link className="underline" href="#">
               Восстановить
-            </Link>
+            </Link> */}
           </div>
         </div>
       </main>

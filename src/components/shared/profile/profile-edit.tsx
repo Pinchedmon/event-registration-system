@@ -146,6 +146,7 @@ export function ProfileEdit(props: { id: string }) {
                 <InputMask
                   mask="+7 (999) 999-99-99"
                   {...register("phone")}
+                  defaultValue={data.data?.phone ?? ""}
                   className="col-span-3 w-full rounded-[0.5rem] border bg-white px-4 py-2 text-sm text-black"
                   placeholder="номер"
                   // inputClassName="text-black text-base leading-none placeholder:text-gray-400"

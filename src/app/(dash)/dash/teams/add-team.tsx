@@ -17,8 +17,6 @@ import { ru } from "date-fns/locale";
 import { api } from "@/trpc/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
-import { Select } from "@/components/ui/select";
-import { DatePickerDemo } from "@/components/ui/date-time-picket";
 import {
   Popover,
   PopoverContent,
@@ -163,7 +161,6 @@ export const AddTeam: React.FC<Props> = ({ className }) => {
                   defaultMonth={new Date()} // Set default month to current month
                   selected={date}
                   onSelect={handleDateChange}
-                  initialFocus
                   locale={ru}
                 />
               </PopoverContent>

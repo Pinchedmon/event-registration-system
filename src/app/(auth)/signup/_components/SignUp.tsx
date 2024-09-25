@@ -13,7 +13,7 @@ interface Props {
 }
 
 enum Roles {
-  ADMIN = "Администратор",
+  // ADMIN = "Администратор",
   ORGANIZER = "Организатор",
   REGISTRATOR = "Регистратор",
   USER = "Пользователь",
@@ -44,7 +44,7 @@ export const SignUpForm: React.FC<Props> = ({ className }) => {
         title: "✅ Успешно",
         description: "Вы добавили картинки",
       });
-      router.push("/home");
+      router.push("/login");
     },
   });
   const {
@@ -59,7 +59,6 @@ export const SignUpForm: React.FC<Props> = ({ className }) => {
       password: data.password,
       role: Object.keys(Roles)[Object.values(Roles).indexOf(data.role)]! as
         | "USER"
-        | "ADMIN"
         | "ORGANIZER"
         | "REGISTRATOR",
       firstName: null,
