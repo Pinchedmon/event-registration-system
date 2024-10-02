@@ -23,6 +23,9 @@ import {
 
 import { api } from "@/trpc/react";
 import { Team } from "@/server/api/schema/team";
+import { useSession } from "next-auth/react";
+
+import useTeamStore from "@/lib/teamStore";
 
 interface Props {
   className?: string;
@@ -31,11 +34,15 @@ interface Props {
 }
 
 export default function TeamSwitcher({ className, id, email }: Props) {
+  const { setSelectedTeamId } = useTeamStore((state) => state);
   const data = api.team.getMyTeams.useQuery(id);
   const [open, setOpen] = React.useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
 
+  React.useEffect(() => {
+    setSelectedTeamId(selectedTeam?.id as string);
+  }, [selectedTeam]);
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
       <Popover open={open} onOpenChange={setOpen}>

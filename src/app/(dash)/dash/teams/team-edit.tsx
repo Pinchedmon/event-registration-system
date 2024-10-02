@@ -139,7 +139,7 @@ export const TeamEdit: React.FC<Props> = ({ className, id }) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="endDate" className="text-right">
-              Тема
+              Дата
             </Label>
             <Popover>
               <PopoverTrigger asChild>

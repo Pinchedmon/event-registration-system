@@ -1,20 +1,15 @@
 import { getServerAuthSession } from "@/server/auth";
 import { HydrateClient } from "@/trpc/server";
-import Navbar from "./_components/navbar";
+import { redirect } from "next/navigation";
 
 export default async function DashPage() {
   const session = await getServerAuthSession();
-
+  if (session?.user.role == "USER" || !session) {
+    return redirect("/home");
+  }
   return (
     <HydrateClient>
-      <div>main</div>
+      <div className="text-2xl font-bold">Панель управления</div>
     </HydrateClient>
   );
-}
-{
-  /* <div className="flex-col md:flex">
-<div className="border-b">
-  <Navbar />
-</div>
-</div> */
 }

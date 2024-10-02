@@ -4,9 +4,8 @@ import { Title } from "@/components/shared/title";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { api } from "@/trpc/react";
-import { teamsColumns } from "./teams-columns";
-import { AddTeam } from "./add-team";
-import { useSession } from "next-auth/react";
+import { AddTeam } from "../teams/add-team";
+import { teamsColumns } from "../teams/teams-columns";
 
 interface Props {
   className?: string;
@@ -14,13 +13,11 @@ interface Props {
 
 export const TeamsTable: React.FC<Props> = ({ className }) => {
   const { data } = api.team.getAllTeams.useQuery();
-  const session = useSession();
+
   return (
     <div className={cn(className, "mt-4 h-full")}>
       <Title text={"Команды"} className="mb-2" />
-      {session.data && session.data.user.role == "ORGANIZER" && (
-        <AddTeam className="mb-2" />
-      )}
+      <AddTeam className="mb-2" />
       {data && <DataTable columns={teamsColumns} data={data} />}
     </div>
   );

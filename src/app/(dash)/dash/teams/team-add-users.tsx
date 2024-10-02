@@ -127,6 +127,7 @@ export const TeamAddUsers: React.FC<Props> = ({ className, teamId }) => {
                     />
                     <span>{user.email}</span>
                     <select
+                      defaultValue={user.role}
                       value={
                         selectedUsers.find(
                           (selectedUser: any) =>

@@ -17,16 +17,18 @@ export const Navbar = () => {
         Мероприятия 2024
       </Link>
       <div className="flex gap-4">
-        {session.data?.user.email ? (
+        {session.status == "loading" ? (
+          "загрузка..."
+        ) : session.data?.user.email ? (
           <div>
             <ProfileBar
               email={session.data.user.email}
               id={session.data.user.id}
+              role={session.data.user.role}
             />
           </div>
         ) : (
           <>
-            {" "}
             <Link href={"/signup"} className="hidden md:block">
               <Button variant={"outline"}>Зарегистрироваться</Button>
             </Link>

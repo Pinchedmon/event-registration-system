@@ -34,7 +34,7 @@ export const UpcomingEvents: React.FC<Props> = ({ className }) => {
           <MainEvent setActive={() => setActiveId("")} id={activeId} />
         )}
 
-        <div className="flex gap-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {data &&
             data.map((item: EventType) => (
               <Event

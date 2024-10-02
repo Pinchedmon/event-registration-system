@@ -52,10 +52,12 @@ export const AddEvent: React.FC<Props> = ({ className, id }) => {
         title: "Успешно",
         description: "Вы добавили мероприятие",
       });
-      trpcClient.event.getAllEvents.refetch();
+      trpcClient.event.getAllEventbyAdmin.refetch();
+      trpcClient.event.getAllEventbyTeam.refetch();
       setIsOpen(false);
     },
   });
+  const { data: teams } = api.team.getAllTeams.useQuery();
   const {
     register,
     handleSubmit,
@@ -65,7 +67,6 @@ export const AddEvent: React.FC<Props> = ({ className, id }) => {
   const onSubmit: SubmitHandler<Event> = (data) => {
     mutation.mutate({
       ...data,
-      userId: id, // assuming you have a currentUser object with an id field
       startDate,
       endDate,
       registrationStartDate,
@@ -126,6 +127,26 @@ export const AddEvent: React.FC<Props> = ({ className, id }) => {
               placeholder={errors.description ? "Обязательно" : "Описание"}
               {...register("description")}
             />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="teamId" className="text-right">
+              Команда
+            </Label>
+            <select
+              id="teamId"
+              className={cn(
+                errors.teamId ? "border-red-500 placeholder:text-red-500" : "",
+                "col-span-3",
+              )}
+              {...register("teamId", { required: true })}
+            >
+              <option value="">Выберите команду</option>
+              {teams?.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex gap-2">
             <div className="w-full">

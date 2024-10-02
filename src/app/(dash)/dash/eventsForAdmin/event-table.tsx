@@ -4,22 +4,21 @@ import { Title } from "@/components/shared/title";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { api } from "@/trpc/react";
-import { AddEvent } from "./add-event";
+
 import { useSession } from "next-auth/react";
-import { eventColumns } from "./event-columns";
+
 import useTeamStore from "@/lib/teamStore";
+import { AddEvent } from "../events/add-event";
+import { eventColumns } from "../events/event-columns";
 
 interface Props {
   className?: string;
 }
 
 export const EventTable: React.FC<Props> = ({ className }) => {
-  const { selectedTeamId } = useTeamStore((state) => state);
   const session = useSession();
-  const { data } = api.event.getAllEventbyTeam.useQuery(
-    selectedTeamId as string,
-  );
-
+  const { data } = api.event.getAllEventbyAdmin.useQuery();
+  console.log(data);
   return (
     <div className={cn(className, "mt-4 h-full")}>
       <Title text={"Мероприятия"} className="mb-2" />

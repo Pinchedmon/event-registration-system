@@ -14,15 +14,14 @@ export const eventSchema = z.object({
   createdAt: z.date().default(new Date()),
   updatedAt: z.date().default(new Date()).optional(),
   deletedAt: z.date().nullable(),
-
-  userId: z.string().nullable(),
+  teamId: z.string().nullable(),
 });
 export const eventCardSchema = eventSchema.omit({
   registration: true,
   registrationStartDate: true,
   registrationEndDate: true,
   createdAt: true,
-  userId: true,
+  teamId: true,
   deletedAt: true,
   updatedAt: true,
 });

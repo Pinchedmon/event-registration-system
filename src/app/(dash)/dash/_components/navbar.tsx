@@ -17,6 +17,12 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+        <Link
+          href="/home"
+          className="text-nowrap bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-2xl font-bold text-transparent"
+        >
+          Мероприятия 2024
+        </Link>
         {session.data && (
           <TeamSwitcher
             id={session.data?.user.id}
@@ -25,9 +31,16 @@ const Navbar = () => {
         )}
         <div className="flex w-full gap-8">
           <Link
-            href="/dash/events"
+            href={
+              session.data?.user.role == "ADMIN"
+                ? "/dash/eventsForAdmin"
+                : "/dash/events"
+            }
             className={clsx(
-              pathname == "/dash/events"
+              pathname ==
+                (session.data?.user.role == "ADMIN"
+                  ? "/dash/eventsForAdmin"
+                  : "/dash/events")
                 ? "text-blue-500"
                 : "text-muted-foreground",
               "transition-colors hover:text-foreground",
@@ -37,9 +50,16 @@ const Navbar = () => {
           </Link>
 
           <Link
-            href="/dash/teams"
+            href={
+              session.data?.user.role == "ADMIN"
+                ? "/dash/teamsForAdmin"
+                : "/dash/teams"
+            }
             className={clsx(
-              pathname == "/dash/teams"
+              pathname ==
+                (session.data?.user.role == "ADMIN"
+                  ? "/dash/teamsForAdmin"
+                  : "/dash/teams")
                 ? "text-blue-500"
                 : "text-muted-foreground",
               "transition-colors hover:text-foreground",
@@ -59,17 +79,19 @@ const Navbar = () => {
           >
             Участники
           </Link> */}
-          <Link
-            href="/dash/users"
-            className={clsx(
-              pathname == "/dash/users"
-                ? "text-blue-500"
-                : "text-muted-foreground",
-              "transition-colors hover:text-foreground",
-            )}
-          >
-            Пользователи
-          </Link>
+          {session.data?.user.role == "ADMIN" && (
+            <Link
+              href="/dash/users"
+              className={clsx(
+                pathname == "/dash/users"
+                  ? "text-blue-500"
+                  : "text-muted-foreground",
+                "transition-colors hover:text-foreground",
+              )}
+            >
+              Пользователи
+            </Link>
+          )}
         </div>
       </nav>
       <Sheet>
@@ -82,9 +104,16 @@ const Navbar = () => {
         <SheetContent className="text-white" side="left">
           <nav className="grid gap-12 text-2xl font-bold">
             <Link
-              href="/dash/events"
+              href={
+                session.data?.user.role == "ADMIN"
+                  ? "/dash/eventsForAdmin"
+                  : "/dash/events"
+              }
               className={clsx(
-                pathname == "/dash/events"
+                pathname ==
+                  (session.data?.user.role == "ADMIN"
+                    ? "/dash/eventsForAdmin"
+                    : "/dash/events")
                   ? "text-blue-500"
                   : "text-muted-foreground",
                 "transition-colors hover:text-foreground",
@@ -94,9 +123,16 @@ const Navbar = () => {
             </Link>
 
             <Link
-              href="/dash/team"
+              href={
+                session.data?.user.role == "ADMIN"
+                  ? "/dash/teamsForAdmin"
+                  : "/dash/teams"
+              }
               className={clsx(
-                pathname == "/dash/team"
+                pathname ==
+                  (session.data?.user.role == "ADMIN"
+                    ? "/dash/teamsForAdmin"
+                    : "/dash/teams")
                   ? "text-blue-500"
                   : "text-muted-foreground",
                 "transition-colors hover:text-foreground",
@@ -116,26 +152,31 @@ const Navbar = () => {
             >
               Участники
             </Link> */}
-            <Link
-              href="/dash/users"
-              className={clsx(
-                pathname == "/dash/users"
-                  ? "text-blue-500"
-                  : "text-muted-foreground",
-                "transition-colors hover:text-foreground",
-              )}
-            >
-              Пользователи
-            </Link>
+            {session.data?.user.role == "ADMIN" && (
+              <Link
+                href="/dash/users"
+                className={clsx(
+                  pathname == "/dash/users"
+                    ? "text-blue-500"
+                    : "text-muted-foreground",
+                  "transition-colors hover:text-foreground",
+                )}
+              >
+                Пользователи
+              </Link>
+            )}
           </nav>
         </SheetContent>
       </Sheet>
-      {session.data && (
-        <ProfileBar
-          email={session.data?.user.email}
-          id={session.data?.user.id}
-        />
-      )}
+      {session.status == "loading"
+        ? "загрузка..."
+        : session.data && (
+            <ProfileBar
+              email={session.data?.user.email}
+              id={session.data?.user.id}
+              role={session.data.user.role}
+            />
+          )}
     </div>
   );
 };

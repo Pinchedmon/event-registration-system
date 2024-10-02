@@ -2,12 +2,8 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-
 import moment from "moment";
 import "moment/locale/ru";
-import { Event as EventCard } from "@/server/api/schema/event";
-import Link from "next/link";
 import { api } from "@/trpc/react";
 import { FollowEventForm } from "./follow-event-form";
 
@@ -33,7 +29,7 @@ export const MainEvent: React.FC<Props> = ({ className, setActive, id }) => {
               <Image
                 src={data.image}
                 alt=""
-                className="h-full min-w-[300px] rounded-xl"
+                className="aspect-square h-full max-h-[300px] max-w-[300px] rounded-xl"
                 width={400}
                 height={400}
               />

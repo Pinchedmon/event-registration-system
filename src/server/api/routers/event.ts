@@ -41,7 +41,14 @@ export const eventRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-
+  getAllEventbyAdmin: publicProcedure.query(async () => {
+    return db.event.findMany();
+  }),
+  getAllEventbyTeam: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => {
+      return db.event.findMany({ where: { teamId: input } });
+    }),
   // Get an event by ID
   getEvent: publicProcedure.input(z.string()).query(async ({ input }) => {
     return db.event.findUnique({ where: { id: input } });

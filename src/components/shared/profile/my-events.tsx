@@ -68,6 +68,7 @@ export function MyEvents(props: { id: string }) {
             Список мероприятий, в которых вы участвуете
           </DialogDescription>
         </DialogHeader>
+        {data?.length == 0 && "Вы не записались ещё ни на одно мероприятие"}
         {data && (
           <div className="grid gap-4 overflow-y-auto py-4 md:grid-cols-2">
             {data.map((part: Participant | any) => (
@@ -122,7 +123,7 @@ export function MyEvents(props: { id: string }) {
                             part.eventId
                           }
                           title={"Title for my QR Code"}
-                          size={400} // adjust the size as needed
+                          size={300} // adjust the size as needed
                           bgColor={"#ffffff"}
                           fgColor={"#000000"}
                           level={"L"}
