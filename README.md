@@ -6,4 +6,5 @@ Project for enterprise
 
 - run the script for db (./start-database.sh)
 - npm i
+- npm run seed
 - npm run dev
